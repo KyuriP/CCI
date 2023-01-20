@@ -1,7 +1,7 @@
 
 #' Cyclic Causal Inference (CCI) algorithm.
 #'
-#' Discovers a partially oriented maximal almost ancestral graph (MAAG) of a directed graph G, 
+#' Discovers a partially oriented maximal almost ancestral graph (MAAG) of a directed graph G,
 #' provided that the global Markov property and d-separation faithfulness holds according to G.
 #'
 #' @param suffStat list of sufficient statistics needed by the CI test. E.g., the data or covariance matrix
@@ -16,9 +16,9 @@
 
 
 cci <- function (suffStat, indepTest, alpha, p, skeleton_pre=NULL,
-                 rules = rep(TRUE, 7), verbose = FALSE)
+                 rules = rep(TRUE, 7), verbose = FALSE, labels=NULL)
 {
- 
+
   if (verbose)
     cat("Compute Skeleton\n================\n")
 
@@ -30,6 +30,8 @@ cci <- function (suffStat, indepTest, alpha, p, skeleton_pre=NULL,
   allPdsep <- pdsepRes$allPdsep
   n.edgetestsPD <- pdsepRes$n.edgetests
   max.ordPD <- pdsepRes$max.ord
+  if(!is.null(labels)) labels <- labels else labels <- as.character(seq_len(p))
+
 
   tripleList <- NULL
 
@@ -60,6 +62,8 @@ cci <- function (suffStat, indepTest, alpha, p, skeleton_pre=NULL,
   res <- udag2pag4(pag = list_f$pag, sepset, rules = rules, unfVect = tripleList,
                    verbose = verbose, rules_used = list_f$rules_used)
 
+  # label the pag
+  dimnames(res$pag) <- list(labels, labels)
   return(list(maag = res$pag, pre_OR_res = list_f$pag, rules_used = res$rules_used, sepset=sepset))
 
 }
