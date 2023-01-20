@@ -1,4 +1,4 @@
-Package: CCI_KP
+Package: CCI.KP
 Type: Package
 Title: Cyclic Causal Inference
 Version: 0.1.0
