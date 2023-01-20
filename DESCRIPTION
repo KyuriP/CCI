@@ -1,9 +1,9 @@
-Package: CCI
+Package: CCI_KP
 Type: Package
 Title: Cyclic Causal Inference
 Version: 0.1.0
-Author: Eric V. Strobl
-Maintainer: Eric V. Strobl <ericvonstrobl@gmail.com>
+Author: Kyuri Park
+Maintainer: Kyuri Park <kyurheep@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 Depends: MASS, pcalg
