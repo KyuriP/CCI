@@ -62,6 +62,8 @@ cci <- function (suffStat, indepTest, alpha, p, skeleton_pre=NULL,
   res <- udag2pag4(pag = list_f$pag, sepset, rules = rules, unfVect = tripleList,
                    verbose = verbose, rules_used = list_f$rules_used)
 
+  # make sure they are numeric matrix (when only 0, 1 exist it turns into logical values)
+  apply(res$pag, 2, as.numeric)
   # label the pag
   dimnames(res$pag) <- list(labels, labels)
   return(list(maag = res$pag, pre_OR_res = list_f$pag, rules_used = res$rules_used, sepset=sepset))
