@@ -41,27 +41,21 @@ skeleton_new_jci <- function (suffStat, indepTest, alpha, labels = NULL, p,
   } else if (!identical(fixedEdges, t(fixedEdges))) {
     stop("fixedEdges must be symmetric")
   }
+
   
-  # Handle JCI Assumptions:
-  jci <- match.arg(jci)
-  if (jci == "123" && length(contextVars) > 0) {
-    # Set fixed edges between context variables for JCI Assumption 3
-    fixedEdges[contextVars, contextVars] <- TRUE
-  }
-  
-  if (jci %in% c("1", "123") && length(contextVars) > 0) {
-    # Direct all edges between context and system variables (JCI Assumption 1 and 2)
-    for (i in contextVars) {
-      for (j in setdiff(seq_len(p), contextVars)) {
-        if (jci == "123") {
-          fixedEdges[i, j] <- TRUE  # k -> i for JCI123
-          G[i, j] <- FALSE          # No need to test this edge
-        } else if (jci == "1") {
-          fixedEdges[i, j] <- TRUE  # k -> i for JCI1
-        }
-      }
-    }
-  }
+  # if (jci %in% c("1", "123") && length(contextVars) > 0) {
+  #   # Direct all edges between context and system variables (JCI Assumption 1 and 2)
+  #   for (i in contextVars) {
+  #     for (j in setdiff(seq_len(p), contextVars)) {
+  #       if (jci == "123") {
+  #         fixedEdges[i, j] <- TRUE  # k -> i for JCI123
+  #         G[i, j] <- FALSE          # No need to test this edge
+  #       } else if (jci == "1") {
+  #         fixedEdges[i, j] <- TRUE  # k -> i for JCI1
+  #       }
+  #     }
+  #   }
+  # }
   
   # Use fast skeleton estimation if requested
   if (method == "stable.fast") {
