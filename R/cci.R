@@ -42,7 +42,7 @@ cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL,
   }
   
   pdsepRes <- IP_discovery(suffStat, indepTest = indepTest, alpha = alpha, p = p, 
-                           contextVars = contextVars, fixedEdges = fixedEdges)
+                           fixedEdges = fixedEdges)
   
   G <- pdsepRes$G
   sepset <- pdsepRes$sepset
@@ -76,7 +76,7 @@ cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL,
   
   # Step 7: Final edge orientation with udag2pag4 (already modified for JCI)
   res <- udag2pag4(pag = list_f$pag, sepset, rules = rules, unfVect = tripleList, 
-                   verbose = verbose)
+                   verbose = verbose,  contextVars = contextVars, jci = jci)
   
   # Ensure result is a numeric matrix and label it
   res$pag <- apply(res$pag, 2, as.numeric)

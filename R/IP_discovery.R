@@ -5,38 +5,37 @@
 #' @return List containing the skeleton data
 
 IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, 
-                         fixedEdges = NULL, contextVars = NULL, 
-                         jci = c("0", "1", "123"), verbose = FALSE, ...) {
+                         fixedEdges = NULL, verbose = FALSE, ...) {
   
   # Start timing the process
   time_start <- proc.time()
   
-  # Match the JCI assumption
-  jci <- match.arg(jci)
-  
-  # Handle JCI assumptions by setting fixed edges between context and system variables
-  if (jci == "123" && !is.null(contextVars)) {
-    # Ensure fixedEdges is a square matrix
-    if (is.null(fixedEdges)) {
-      fixedEdges <- matrix(FALSE, p, p)
-    }
-    # Set fixed edges between context variables for JCI 123 assumption
-    fixedEdges[contextVars, contextVars] <- TRUE
-  }
-  
-  if (jci %in% c("1", "123") && !is.null(contextVars)) {
-    # Direct edges between context and system variables (JCI 1 and 2)
-    for (i in contextVars) {
-      for (j in setdiff(seq_len(p), contextVars)) {
-        fixedEdges[i, j] <- TRUE
-      }
-    }
-  }
+  # # Match the JCI assumption
+  # jci <- match.arg(jci)
+  # 
+  # # Handle JCI assumptions by setting fixed edges between context and system variables
+  # if (jci == "123" && !is.null(contextVars)) {
+  #   # Ensure fixedEdges is a square matrix
+  #   if (is.null(fixedEdges)) {
+  #     fixedEdges <- matrix(FALSE, p, p)
+  #   }
+  #   # Set fixed edges between context variables for JCI 123 assumption
+  #   fixedEdges[contextVars, contextVars] <- TRUE
+  # }
+  # 
+  # if (jci %in% c("1", "123") && !is.null(contextVars)) {
+  #   # Direct edges between context and system variables (JCI 1 and 2)
+  #   for (i in contextVars) {
+  #     for (j in setdiff(seq_len(p), contextVars)) {
+  #       fixedEdges[i, j] <- TRUE
+  #     }
+  #   }
+  # }
   
   # Run the skeleton discovery using the modified skeleton function
   skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, 
-                           m.max = max.cs, contextVars = contextVars, 
-                           fixedEdges = fixedEdges, jci = jci, verbose = verbose)
+                           m.max = max.cs, 
+                           fixedEdges = fixedEdges,verbose = verbose)
   
   # Extract the graph and separation sets from the skeleton phase
   G_sk <- as(skel@graph, "matrix")
