@@ -11,6 +11,9 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf,
   # Start timing the process
   time_start <- proc.time()
   
+  # Match the JCI assumption
+  jci <- match.arg(jci)
+  
   # Handle JCI assumptions by setting fixed edges between context and system variables
   if (jci == "123" && !is.null(contextVars)) {
     # Ensure fixedEdges is a square matrix
