@@ -1,88 +1,93 @@
-udag2pag4 <- function (pag, sepset, rules = rep(TRUE, 7), unfVect = NULL,
-                       verbose = FALSE, rules_used = c())
-{
+udag2pag4 <- function(pag, sepset, rules = rep(TRUE, 7), unfVect = NULL, 
+                      verbose = FALSE, rules_used = c(), jci = c("0","1","12","123"), contextVars = NULL) {
+  
+  # Ensure the arguments are logical and valid
   stopifnot(is.logical(rules), length(rules) == 7)
+  
+  # Apply JCI assumptions if context variables are provided
+  jci <- match.arg(jci)
+  
+  if (!is.null(contextVars) && jci != "0") {
+    p <- as.numeric(dim(pag)[1])
+    
+    for (x in seq_len(p)) {
+      for (y in seq_len(p)) {
+        # Apply JCI Assumption 3: All context variables have bidirected edges between them
+        if (jci == "123" && x != y && x %in% contextVars && y %in% contextVars) {
+          if (verbose) cat("\nJCI Assumption 3:", "\nOrient:", x, "*->", y, " as they are contextVars\n")
+          pag[x, y] <- 2  # Directed edge from x to y
+        }
+        # Apply JCI Assumptions 1 and 2: Context to system variable orientations
+        if (pag[x, y] && x %in% contextVars && !(y %in% contextVars)) {
+          if (jci == "123" || jci == "12") {
+            if (verbose) cat("\nJCI Assumptions 1, 2:", "\nOrient:", x, "-->", y, " (context to system variable)\n")
+            pag[y, x] <- 3  # Ensure tail at system variable
+            pag[x, y] <- 2  # Arrowhead at system variable
+          } else if (jci == "1") {
+            if (verbose) cat("\nJCI Assumption 1:", "\nOrient:", x, "*->", y, " (context to system variable)\n")
+            pag[x, y] <- 2  # Arrowhead at system variable
+          }
+        }
+      }
+    }
+  }
+  
+  # Proceed with the usual orientation rules, ensuring no conflicts with JCI assumptions
   if (any(pag != 0)) {
     p <- as.numeric(dim(pag)[1])
-
     old_pag1 <- matrix(0, p, p)
-
+    
     while (any(old_pag1 != pag)) {
       old_pag1 <- pag
-
-
+      
+      # Rule 1: Orient according to conditions
       if (rules[1]) {
         ind <- which((pag == 2 & t(pag) != 0), arr.ind = TRUE)
         for (i in seq_len(nrow(ind))) {
           a <- ind[i, 1]
           b <- ind[i, 2]
-          indC <- which((pag[b, ] != 0 & pag[, b] ==
-                           1) & (pag[a, ] == 0 & pag[, a] == 0))
+          indC <- which((pag[b, ] != 0 & pag[, b] == 1) & (pag[a, ] == 0 & pag[, a] == 0))
           indC <- setdiff(indC, a)
           if (length(indC) > 0) {
             if (length(unfVect) == 0) {
-              #pag[b, indC] <- 2
               pag[indC, b] <- 3
-
-              rules_used = unique(c(rules_used,1))
-
-              if (verbose)
-                cat("\nRule 1a", "\nOrient:", a, "*->",
-                    b, "o-*", indC, "as:", b, "-*", indC,
-                    "\n")
-              for (c in seq_len(length(indC))){
-                if (!is_2triangle(pag,a,b,indC[c])){
+              rules_used = unique(c(rules_used, 1))
+              if (verbose) cat("\nRule 1a", "\nOrient:", a, "*->", b, "o-*", indC, "as:", b, "-*", indC, "\n")
+              for (c in seq_len(length(indC))) {
+                if (!is_2triangle(pag, a, b, indC[c])) {
                   pag[b, indC[c]] <- 2
-                  if (verbose)
-                    cat("\nRule 1b", "\nOrient:", a, "*->",
-                        b, "-*", indC[c], "as:", b, "->", indC[c],
-                        "\n")
+                  if (verbose) cat("\nRule 1b", "\nOrient:", a, "*->", b, "-*", indC[c], "as:", b, "->", indC[c], "\n")
                 }
               }
-
-
-            }
-            else {
+            } else {
               for (c in indC) {
-                if (!any(unfVect == triple2numb(p, a,
-                                                b, c), na.rm = TRUE) && !any(unfVect ==
-                                                                             triple2numb(p, c, b, a), na.rm = TRUE)) {
-                  #pag[b, c] <- 2
+                if (!any(unfVect == triple2numb(p, a, b, c), na.rm = TRUE) &&
+                    !any(unfVect == triple2numb(p, c, b, a), na.rm = TRUE)) {
                   pag[c, b] <- 3
-                  if (verbose)
-                    cat("\nRule 1", "\nConservatively orient:",
-                        a, "*->", b, "o-*", c, "as:", b,
-                        "->", c, "\n")
+                  if (verbose) cat("\nRule 1", "\nConservatively orient:", a, "*->", b, "o-*", c, "as:", b, "->", c, "\n")
                 }
               }
             }
           }
         }
       }
-
-
+      
+      # Rule 2: Orient based on specific conditions
       if (rules[2]) {
         ind <- which((pag != 0 & t(pag) == 1), arr.ind = TRUE)
         for (i in seq_len(nrow(ind))) {
           b <- ind[i, 1]
           c <- ind[i, 2]
-
-          indA <- which((pag[b, ] == 3 & pag[, b] !=
-                           0) & (pag[c, ] == 0 & pag[, c] == 0))
+          indA <- which((pag[b, ] == 3 & pag[, b] != 0) & (pag[c, ] == 0 & pag[, c] == 0))
           indA <- setdiff(indA, c)
           if (length(indA) > 0) {
-
-            if (length(select_not_2triangle(pag,c,b,indA,3))>0){
+            if (length(select_not_2triangle(pag, c, b, indA, 3)) > 0) {
               if (length(unfVect) == 0) {
                 pag[c, b] <- 3
-
-                rules_used = unique(c(rules_used,2))
-                if (verbose)
-                  cat("\nRule 2", "\nOrient:", indA, "-o",
-                      b, "o-*", c, "as", b, "-*", c, "\n")
+                rules_used = unique(c(rules_used, 2))
+                if (verbose) cat("\nRule 2", "\nOrient:", indA, "-o", b, "o-*", c, "as", b, "-*", c, "\n")
               }
             }
-
           }
         }
       }
