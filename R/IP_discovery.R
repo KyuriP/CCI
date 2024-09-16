@@ -4,13 +4,36 @@
 #' @param alpha Type I error rate for indepTest
 #' @return List containing the skeleton data
 
-IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, contextVars = NULL, jci = c("0", "1", "123"), verbose = FALSE) {
+IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, 
+                         fixedEdges = NULL, contextVars = NULL, 
+                         jci = c("0", "1", "123"), verbose = FALSE, ...) {
   
   # Start timing the process
   time_start <- proc.time()
   
-  # Run the skeleton discovery using the modified skeleton function that incorporates JCI assumptions
-  skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, m.max = max.cs, contextVars = contextVars, jci = jci, verbose = verbose)
+  # Handle JCI assumptions by setting fixed edges between context and system variables
+  if (jci == "123" && !is.null(contextVars)) {
+    # Ensure fixedEdges is a square matrix
+    if (is.null(fixedEdges)) {
+      fixedEdges <- matrix(FALSE, p, p)
+    }
+    # Set fixed edges between context variables for JCI 123 assumption
+    fixedEdges[contextVars, contextVars] <- TRUE
+  }
+  
+  if (jci %in% c("1", "123") && !is.null(contextVars)) {
+    # Direct edges between context and system variables (JCI 1 and 2)
+    for (i in contextVars) {
+      for (j in setdiff(seq_len(p), contextVars)) {
+        fixedEdges[i, j] <- TRUE
+      }
+    }
+  }
+  
+  # Run the skeleton discovery using the modified skeleton function
+  skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, 
+                           m.max = max.cs, contextVars = contextVars, 
+                           fixedEdges = fixedEdges, jci = jci, verbose = verbose)
   
   # Extract the graph and separation sets from the skeleton phase
   G_sk <- as(skel@graph, "matrix")
@@ -20,7 +43,9 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, contextVar
   time_skel <- proc.time() - time_start
   
   # Perform the possible-d-separation (pdsep) step based on the skeleton
-  pdsepRes <- pdsep(skel@graph, suffStat, indepTest, p = p, sepset = sepset_sk, alpha = alpha, pMax = skel@pMax, m.max = max.cs, verbose = verbose)
+  pdsepRes <- pdsep(skel@graph, suffStat, indepTest, p = p, sepset = sepset_sk, 
+                    alpha = alpha, pMax = skel@pMax, m.max = max.cs, 
+                    fixedEdges = fixedEdges, verbose = verbose)  # Pass fixedEdges here
   
   # Extract the final graph and separation sets after the pdsep phase
   G <- pdsepRes$G
@@ -43,3 +68,4 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, contextVar
   
   return(resIP)
 }
+
