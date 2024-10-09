@@ -13,6 +13,7 @@
 #' @return A list containing the partially oriented MAAG \code{paag} and statistic \code{Sta}
 #' @export
 
+library(kpcalg)
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
                 rules = rep(TRUE, 7), verbose = FALSE, labels = NULL, 
