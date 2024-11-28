@@ -1,7 +1,7 @@
 skeleton_new_jci <- function (suffStat, indepTest, alpha, labels = NULL, p, 
                               method = c("stable", "original", "stable.fast"), 
                               m.max = Inf, fixedGaps = NULL, fixedEdges = NULL, 
-                              NAdelete = TRUE, verbose = FALSE, ...) {
+                              NAdelete = TRUE, numCores = 1, verbose = FALSE) {
   
   cl <- match.call()
   
@@ -61,7 +61,10 @@ skeleton_new_jci <- function (suffStat, indepTest, alpha, labels = NULL, p,
   if (method == "stable.fast") {
     if (identical(indepTest, gaussCItest)) indepTestName <- "gauss"
     else indepTestName <- "rfun"
-    options <- list(verbose = as.integer(verbose), m.max = as.integer(ifelse(is.infinite(m.max), p, m.max)), NAdelete = NAdelete)
+    options <- list(verbose = as.integer(verbose), 
+                    m.max = as.integer(ifelse(is.infinite(m.max), p, m.max)), 
+                    NAdelete = NAdelete,
+                    numCores = numCores)
     res <- .Call("estimateSkeleton", G, suffStat, indepTestName, indepTest, alpha, fixedEdges, options)
     G <- res$amat
     sepset <- lapply(seq_p, function(i) c(lapply(res$sepset[[i]], function(v) if (identical(v, as.integer(-1))) NULL else v), vector("list", p - length(res$sepset[[i]]))))
