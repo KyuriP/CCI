@@ -17,7 +17,7 @@ library(kpcalg)
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
                 rules = rep(TRUE, 7), verbose = FALSE, labels = NULL, 
-                jci = c("0", "1", "12", "123"), contextVars = NULL, fixedGaps = NULL, fixedEdges = NULL) {
+                jci = c("0", "1", "12", "123"), contextVars = NULL, fixedGaps = NULL, fixedEdges = NULL, ...) {
   
   # Match the JCI assumption
   jci <- match.arg(jci)
@@ -43,7 +43,7 @@ cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL,
   }
   
   pdsepRes <- IP_discovery(suffStat, indepTest = indepTest, alpha = alpha, p = p, 
-                           fixedEdges = fixedEdges)
+                           fixedEdges = fixedEdges, ...)
   
   G <- pdsepRes$G
   sepset <- pdsepRes$sepset
@@ -59,25 +59,25 @@ cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL,
   tripleList <- NULL
   
   # Step 2: Orient v-structures (already considering unfounded triples)
-  G <- v_struc(pag = G, sepset, unfVect = tripleList, verbose)
+  G <- v_struc(pag = G, sepset, unfVect = tripleList, verbose, ...)
   
   # Step 3: Post V-Structure adjustment
-  list_pre_v <- after_v_struc(pag = G, sepset, suffStat, indepTest, alpha, verbose = verbose)
+  list_pre_v <- after_v_struc(pag = G, sepset, suffStat, indepTest, alpha, verbose = verbose, ...)
   
   # Step 4: Additional D-separation logic
-  sup_sepset <- extra_dsep(list_pre_v$G, suffStat, indepTest, sepset, alpha, verbose = verbose)
+  sup_sepset <- extra_dsep(list_pre_v$G, suffStat, indepTest, sepset, alpha, verbose = verbose, ...)
   
   # Step 5: Refine graph using JCI and sepset
   list_e <- step_5(list_pre_v$G, sepset, sup_sepset, suffStat, indepTest, alpha, verbose = verbose,
-                   rules_used = list_pre_v$rules_used)
+                   rules_used = list_pre_v$rules_used, ...)
   
   # Step 6: Further update graph with separation sets
   list_f <- step_6(list_e$pag, sepset, sup_sepset, suffStat, indepTest,
-                   alpha, verbose = verbose, list_e$rules_used)
+                   alpha, verbose = verbose, list_e$rules_used, ...)
   
   # Step 7: Final edge orientation with udag2pag4 (already modified for JCI)
   res <- udag2pag4(pag = list_f$pag, sepset, rules = rules, unfVect = tripleList, 
-                   verbose = verbose,  contextVars = contextVars, jci = jci)
+                   verbose = verbose,  contextVars = contextVars, jci = jci, ...)
   
   # Ensure result is a numeric matrix and label it
   res$pag <- apply(res$pag, 2, as.numeric)
