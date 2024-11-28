@@ -16,7 +16,7 @@
 library(kpcalg)
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
-                rules = rep(TRUE, 7), verbose = FALSE, labels = NULL, 
+                rules = rep(TRUE, 7), labels = NULL, 
                 jci = c("0", "1", "12", "123"), contextVars = NULL, fixedGaps = NULL, fixedEdges = NULL, 
                 skel.method = c("stable", "original", "stable.fast"), 
                 NAdelete = TRUE, numCores = 1, verbose = TRUE) {
