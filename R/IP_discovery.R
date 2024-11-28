@@ -47,7 +47,7 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf,
   # Perform the possible-d-separation (pdsep) step based on the skeleton
   pdsepRes <- pdsep(skel@graph, suffStat, indepTest, p = p, sepset = sepset_sk, 
                     alpha = alpha, pMax = skel@pMax, m.max = max.cs, 
-                    fixedEdges = fixedEdges, verbose = verbose)  # Pass fixedEdges here
+                    fixedEdges = fixedEdges, verbose = verbose, ...)  # Pass fixedEdges here
   
   # Extract the final graph and separation sets after the pdsep phase
   G <- pdsepRes$G

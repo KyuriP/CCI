@@ -1,7 +1,7 @@
 skeleton_new_jci <- function (suffStat, indepTest, alpha, labels = NULL, p, 
                               method = c("stable", "original", "stable.fast"), 
                               m.max = Inf, fixedGaps = NULL, fixedEdges = NULL, 
-                              NAdelete = TRUE, verbose = FALSE) {
+                              NAdelete = TRUE, verbose = FALSE, ...) {
   
   cl <- match.call()
   
