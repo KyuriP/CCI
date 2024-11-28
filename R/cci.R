@@ -16,7 +16,7 @@
 library(kpcalg)
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
-                rules = rep(TRUE, 7), labels = NULL, 
+                rules = rep(TRUE, 7), labels = NULL, m.max=Inf,
                 jci = c("0", "1", "12", "123"), contextVars = NULL, fixedGaps = NULL, fixedEdges = NULL, 
                 skel.method = c("stable", "original", "stable.fast"), 
                 NAdelete = TRUE, numCores = 1, verbose = TRUE) {
@@ -45,7 +45,7 @@ cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL,
   }
   
   pdsepRes <- IP_discovery(suffStat, indepTest = indepTest, alpha = alpha, p = p,  labels = labels,
-                           method = skel.method,
+                           method = skel.method, 
                            fixedGaps = fixedGaps, fixedEdges = fixedEdges,
                            NAdelete=NAdelete, m.max=m.max, numCores=numCores, verbose=verbose)
   

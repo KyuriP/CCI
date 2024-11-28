@@ -4,7 +4,7 @@
 #' @param alpha Type I error rate for indepTest
 #' @return List containing the skeleton data
 
-IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, max.cs = Inf, 
+IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, m.max = Inf, 
                          fixedGaps = NULL, fixedEdges = NULL, 
                          method = c("stable", "original", "stable.fast"), 
                          NAdelete = TRUE, numCores = 1, verbose = TRUE) {
@@ -37,7 +37,7 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, max.cs 
   
   # Run the skeleton discovery using the modified skeleton function
   skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, 
-                           m.max = max.cs, 
+                           m.max = m.max, 
                            fixedGaps = NULL, fixedEdges = NULL, 
                            method = c("stable", "original", "stable.fast"), 
                            NAdelete = TRUE, numCores = 1, verbose = TRUE)
@@ -51,7 +51,7 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, max.cs 
   
   # Perform the possible-d-separation (pdsep) step based on the skeleton
   pdsepRes <- pdsep(skel@graph, suffStat, indepTest, p = p, sepset = sepset_sk, 
-                    alpha = alpha, pMax = skel@pMax, m.max = max.cs, 
+                    alpha = alpha, pMax = skel@pMax, m.max = m.max, 
                     fixedEdges = fixedEdges, verbose = verbose)  # Pass fixedEdges here
   
   # Extract the final graph and separation sets after the pdsep phase
