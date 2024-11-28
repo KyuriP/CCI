@@ -17,7 +17,7 @@ library(kpcalg)
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
                 rules = rep(TRUE, 7), verbose = FALSE, labels = NULL, 
-                jci = c("0", "1", "12", "123"), contextVars = NULL) {
+                jci = c("0", "1", "12", "123"), contextVars = NULL, fixedGaps = NULL, fixedEdges = NULL) {
   
   # Match the JCI assumption
   jci <- match.arg(jci)

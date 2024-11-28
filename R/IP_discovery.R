@@ -5,7 +5,7 @@
 #' @return List containing the skeleton data
 
 IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf, 
-                         fixedEdges = NULL, verbose = FALSE, ...) {
+                         fixedGaps = NULL, fixedEdges = NULL, verbose = FALSE, ...) {
   
   # Start timing the process
   time_start <- proc.time()
@@ -35,7 +35,7 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, max.cs = Inf,
   # Run the skeleton discovery using the modified skeleton function
   skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, 
                            m.max = max.cs, 
-                           fixedEdges = fixedEdges,verbose = verbose)
+                           fixedGaps = NULL, fixedEdges = NULL, verbose = verbose, ...)
   
   # Extract the graph and separation sets from the skeleton phase
   G_sk <- as(skel@graph, "matrix")
