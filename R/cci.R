@@ -14,6 +14,8 @@
 #' @export
 
 library(kpcalg)
+library(pcalg)
+
 
 cci <- function(suffStat, indepTest, alpha, p, skeleton_pre = NULL, 
                 rules = rep(TRUE, 7), labels = NULL, m.max=Inf,

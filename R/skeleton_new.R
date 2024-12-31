@@ -65,7 +65,7 @@ skeleton_new_jci <- function (suffStat, indepTest, alpha, labels = NULL, p,
                     m.max = as.integer(ifelse(is.infinite(m.max), p, m.max)), 
                     NAdelete = NAdelete,
                     numCores = numCores)
-    res <- pcalg:::.Call("estimateSkeleton", G, suffStat, indepTestName, indepTest, alpha, fixedEdges, options)
+    res <- .Call("estimateSkeleton", G, suffStat, indepTestName, indepTest, alpha, fixedEdges, options)
     G <- res$amat
     sepset <- lapply(seq_p, function(i) c(lapply(res$sepset[[i]], function(v) if (identical(v, as.integer(-1))) NULL else v), vector("list", p - length(res$sepset[[i]]))))
     pMax <- res$pMax
