@@ -1,12 +1,10 @@
-# Compiler settings
-CC = /opt/homebrew/bin/gcc-14
-CXX = /opt/homebrew/bin/g++-14
 
-# Compiler flags
-PKG_CXXFLAGS = -I"/Library/Frameworks/R.framework/Resources/include" -I"/opt/homebrew/Cellar/boost/1.87.0/include" -std=c++17
+# C++ compiler flags
+# PKG_CXXFLAGS=-I"../inst/include" -I/opt/homebrew/Cellar/boost/1.87.0/include -std=c++17
 
-# Linking libraries
-PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -L/opt/homebrew/lib -L/opt/homebrew/opt/gcc/lib/gcc/14 -lgfortran -lquadmath -lboost_system -lboost_graph -lgcc_s
+# Linker flags
+# PKG_LIBS += -L/opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/14 -lgcc_s
 
-# Make sure that libemutls_w is found
-FLIBS = -L/opt/homebrew/opt/gcc/lib/gcc/14 -L/opt/homebrew/opt/gcc/lib/gcc/14 -lgfortran -lquadmath -lboost_system -lboost_graph -lemutls_w
+
+PKG_CXXFLAGS=-I"../inst/include" -I/opt/homebrew/Cellar/boost/1.87.0/include -std=c++17
+PKG_LIBS += /opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/14/libgcc_s.1.1.dylib

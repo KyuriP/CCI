@@ -4,6 +4,7 @@
 #' Discovers a partially oriented maximal almost ancestral graph (MAAG) of a directed graph G,
 #' provided that the global Markov property and d-separation faithfulness holds according to G.
 #'
+#' @name cci_function
 #' @param suffStat list of sufficient statistics needed by the CI test. E.g., the data or covariance matrix
 #' @param indepTest the CI test function
 #' @param alpha the alpha value for the CI test

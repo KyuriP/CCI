@@ -16,8 +16,11 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports:
-    Rcpp (>= 1.0.5),
-    RcppArmadillo (>= 0.10.5)
+    Rcpp,
+    RcppArmadillo,
+    boot,
+    mgcv
 LinkingTo: 
     Rcpp,
     RcppArmadillo
+RoxygenNote: 7.3.2
