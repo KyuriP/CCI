@@ -6,7 +6,18 @@ Author: Kyuri Park
 Maintainer: Kyuri Park <kyurheep@gmail.com>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-Depends: MASS, pcalg
+Depends: 
+    MASS,
+    pcalg
 License: CC BY-NC 4.0
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports:
+    Rcpp (>= 1.0.5),
+    RcppArmadillo (>= 0.10.5)
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
