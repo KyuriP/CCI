@@ -5,7 +5,7 @@
 #' @return List containing the skeleton data
 
 IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, m.max = Inf, 
-                         fixedGaps = NULL, fixedEdges = NULL, 
+                         fixedGaps = fixedGaps, fixedEdges = fixedEdges, 
                          method = c("stable", "original", "stable.fast"), 
                          NAdelete = TRUE, numCores = 1, verbose = TRUE) {
   
@@ -38,8 +38,8 @@ IP_discovery <- function(suffStat, indepTest, alpha, p, labels = labels, m.max =
   # Run the skeleton discovery using the modified skeleton function
   skel <- skeleton_new_jci(suffStat, indepTest, alpha, p = p, 
                            m.max = m.max, 
-                           fixedGaps = NULL, fixedEdges = NULL, 
-                           method = c("stable", "original", "stable.fast"), 
+                           fixedGaps = fixedGaps, fixedEdges = fixedEdges, 
+                           method = method, 
                            NAdelete = TRUE, numCores = 1, verbose = TRUE)
   
   # Extract the graph and separation sets from the skeleton phase
