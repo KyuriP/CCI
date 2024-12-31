@@ -8,3 +8,5 @@
 
 PKG_CXXFLAGS=-I"../inst/include" -I/opt/homebrew/Cellar/boost/1.87.0/include -std=c++17
 PKG_LIBS += /opt/homebrew/Cellar/gcc/14.2.0_1/lib/gcc/14/libgcc_s.1.1.dylib
+
+

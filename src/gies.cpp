@@ -5,12 +5,20 @@
  * $Id: gies.cpp 501 2019-11-21 07:28:17Z alhauser $
  */
 
+// #include <vector>
+// #include <string>
+// #include <algorithm>
+// // #include <boost/lambda/lambda.hpp>
+// #include <boost/graph/adjacency_list.hpp>
+// // Experimental support for OpenMP; aim: parallelize more and more functions...
+// #ifdef _OPENMP
+// #include <omp.h>
+// #endif
+
+#include <RcppArmadillo.h>
 #include <vector>
 #include <string>
-#include <algorithm>
-// #include <boost/lambda/lambda.hpp>
 #include <boost/graph/adjacency_list.hpp>
-// Experimental support for OpenMP; aim: parallelize more and more functions...
 #ifdef _OPENMP
 #include <omp.h>
 #endif
