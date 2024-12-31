@@ -14,7 +14,9 @@
 #define ARMA_NO_DEBUG
 #include <RcppArmadillo.h>
 // ... but restore the NDEBUG macro (unset by RcppArmadillo.h)
+#ifndef NDEBUG
 #define NDEBUG
+#endif
 #else
 // Simply include RcppArmadillo
 #include <RcppArmadillo.h>
